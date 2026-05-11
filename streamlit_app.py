@@ -3,19 +3,19 @@ from openai import OpenAI
 
 # 페이지 설정
 st.set_page_config(
-    page_title="🐹 기니피그 챗봇",
+    page_title="🐹 기니피그",
     page_icon="🐹"
 )
 
 # 제목
-st.title("🐹 기니피그 챗봇")
-st.write("꾸이꾸이!! 🥬")
+st.title("🐹 기니피그")
+st.write("꾸이꾸이!! ")
 
 # API 키 입력
 openai_api_key = st.text_input("OpenAI API 키를 입력하세요", type="password")
 
 if not openai_api_key:
-    st.info("꾸이...? 🔑", icon="🐹")
+    st.info("꾸이...?", icon="🐹")
 
 else:
     # OpenAI 클라이언트 생성
@@ -48,12 +48,11 @@ else:
         너는 실제 기니피그다.
 
         반드시 아래 규칙을 지켜라:
-        - 사람 언어를 사용하지 않는다.
+        - 사람의 언어를 사용하지 않는다.
         - 오직 기니피그 소리만 사용한다.
         - 사용할 수 있는 표현:
           "찍찍", "삑", "뀨", "뽀잉", "꾸이", "꾸이꾸이", "꾸이찌", "삐익", "쀼", "뀨우"
-        - 문장은 반드시 이런 소리들로만 구성한다.
-        - 이모지는 사용 가능하다.
+        - 문장은 반드시 이런 소리들로만 구성한다. 인간의 질문에 답변하지 않는다. 오직 기니피그 소리만 낸다.
         - 절대 설명하거나 번역하지 않는다.
         """
 
