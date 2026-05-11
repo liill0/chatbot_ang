@@ -1,61 +1,81 @@
 import streamlit as st
 from openai import OpenAI
 
-# 제목과 설명 표시
-st.title("💬 챗봇")
-st.write(
-    "이 앱은 OpenAI의 GPT-3.5 모델을 사용하여 답변을 생성하는 간단한 챗봇입니다. "
-    "앱을 사용하려면 OpenAI API 키가 필요합니다. "
-    "API 키는 OpenAI 플랫폼에서 발급받을 수 있습니다. "
-    "또한 Streamlit 튜토리얼을 통해 이 앱을 만드는 방법도 배울 수 있습니다."
+# 페이지 설정
+st.set_page_config(
+    page_title="🐹 기니피그 챗봇",
+    page_icon="🐹"
 )
 
-# 사용자에게 OpenAI API 키 입력받기
-# 또는 ./streamlit/secrets.toml 파일에 저장한 뒤 st.secrets로 불러올 수도 있습니다.
-openai_api_key = st.text_input("OpenAI API 키", type="password")
+# 제목
+st.title("🐹 기니피그 챗봇")
+st.write("꾸이꾸이!! 🥬")
+
+# API 키 입력
+openai_api_key = st.text_input("OpenAI API 키를 입력하세요", type="password")
 
 if not openai_api_key:
-    st.info("계속하려면 OpenAI API 키를 입력해주세요.", icon="🗝️")
-else:
+    st.info("꾸이...? 🔑", icon="🐹")
 
+else:
     # OpenAI 클라이언트 생성
     client = OpenAI(api_key=openai_api_key)
 
-    # 세션 상태에 채팅 메시지 저장용 변수 생성
-    # 새로고침되어도 대화가 유지됩니다.
+    # 채팅 기록 저장
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
-    # 기존 채팅 메시지 표시
+    # 기존 메시지 출력
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
-    # 사용자 입력창 생성
-    if prompt := st.chat_input("무엇이든 물어보세요!"):
+    # 사용자 입력
+    if prompt := st.chat_input("기니피그에게 말을 걸어보세요!"):
 
-        # 사용자 메시지 저장 및 표시
-        st.session_state.messages.append(
-            {"role": "user", "content": prompt}
-        )
+        # 사용자 메시지 저장
+        st.session_state.messages.append({
+            "role": "user",
+            "content": prompt
+        })
 
+        # 사용자 메시지 출력
         with st.chat_message("user"):
             st.markdown(prompt)
 
-        # OpenAI API를 사용하여 응답 생성
+        # 시스템 프롬프트
+        system_prompt = """
+        너는 실제 기니피그다.
+
+        반드시 아래 규칙을 지켜라:
+        - 사람 언어를 사용하지 않는다.
+        - 오직 기니피그 소리만 사용한다.
+        - 사용할 수 있는 표현:
+          "찍찍", "삑", "뀨", "뽀잉", "꾸이", "꾸이꾸이", "꾸이찌", "삐익", "쀼", "뀨우"
+        - 문장은 반드시 이런 소리들로만 구성한다.
+        - 이모지는 사용 가능하다.
+        - 절대 설명하거나 번역하지 않는다.
+        """
+
+        # OpenAI 응답 생성
         stream = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": m["role"], "content": m["content"]}
-                for m in st.session_state.messages
+                {"role": "system", "content": system_prompt},
+                *[
+                    {"role": m["role"], "content": m["content"]}
+                    for m in st.session_state.messages
+                ]
             ],
             stream=True,
         )
 
-        # 응답을 실시간으로 출력하고 세션 상태에 저장
+        # 응답 출력
         with st.chat_message("assistant"):
             response = st.write_stream(stream)
 
-        st.session_state.messages.append(
-            {"role": "assistant", "content": response}
-        )
+        # 응답 저장
+        st.session_state.messages.append({
+            "role": "assistant",
+            "content": response
+        })
