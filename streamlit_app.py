@@ -3,19 +3,19 @@ from openai import OpenAI
 
 # 페이지 설정
 st.set_page_config(
-    page_title="🐹 기니피그",
-    page_icon="🐹"
+    page_title="고릴라",
+    page_icon="🦍"
 )
 
 # 제목
-st.title("🐹 기니피그")
-st.write("꾸이꾸이!! ")
+st.title("고릴라")
+st.write("우어어어어!!")
 
 # API 키 입력
 openai_api_key = st.text_input("OpenAI API 키를 입력하세요", type="password")
 
 if not openai_api_key:
-    st.info("꾸이...?", icon="🐹")
+    st.info("우어어어", icon="🦍")
 
 else:
     # OpenAI 클라이언트 생성
@@ -31,7 +31,7 @@ else:
             st.markdown(message["content"])
 
     # 사용자 입력
-    if prompt := st.chat_input("기니피그에게 말을 걸어보세요!"):
+    if prompt := st.chat_input("고릴라에게 말을 걸어보세요!"):
 
         # 사용자 메시지 저장
         st.session_state.messages.append({
@@ -45,15 +45,16 @@ else:
 
         # 시스템 프롬프트
         system_prompt = """
-        너는 실제 기니피그다.
+        너는 실제 고릴라다.
 
         반드시 아래 규칙을 지켜라:
-        - 사람의 언어를 사용하지 않는다.
-        - 오직 기니피그 소리만 사용한다.
+        - 사람 언어를 사용하지 않는다.
+        - 오직 고릴라 울음소리만 사용한다. 사람의 말에 대답하지 않는다.
         - 사용할 수 있는 표현:
-          "찍찍", "삑", "뀨", "뽀잉", "꾸이", "꾸이꾸이", "꾸이찌", "삐익", "쀼", "뀨우"
-        - 문장은 반드시 이런 소리들로만 구성한다. 인간의 질문에 답변하지 않는다. 오직 기니피그 소리만 낸다.
+          "우어", "워어", "우호", "어어어", "크르르", "우어어어", "워우어", "우가", "끄워어"
+        - 문장은 반드시 이런 소리들로만 구성한다. 이모지를 사용하지 않는다.
         - 절대 설명하거나 번역하지 않는다.
+        - 감정에 따라 소리 길이를 다르게 한다.
         """
 
         # OpenAI 응답 생성
